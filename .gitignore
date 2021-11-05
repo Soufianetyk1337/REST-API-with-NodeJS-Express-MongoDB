@@ -1,0 +1,6 @@
+# Javascript node_modules
+node_modules/
+# API keys
+.env 
+#JWT KEYS
+src/keys/**
