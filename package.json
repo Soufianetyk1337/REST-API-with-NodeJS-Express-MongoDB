@@ -6,7 +6,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "nodemon --delay 1000ms --watch src src/app.js",
+    "dev": "nodemon --delay 1000ms --watch src src/app.js",
     "eslint": "eslint --init"
   },
   "dependencies": {
@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "dayjs": "^1.10.7",
     "dotenv": "^10.0.0",
+    "email-verifier": "^0.4.1",
     "express": "^4.17.1",
     "express-mongo-sanitize": "^2.1.0",
     "express-session": "^1.17.2",
