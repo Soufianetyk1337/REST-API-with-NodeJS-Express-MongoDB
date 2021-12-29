@@ -24,6 +24,9 @@ import { userIsVerified } from "./middleware/userIsVerified.js";
 import { checkEmailExistence } from "./middleware/checkEmailExistence.js";
 // req.headers['x-forwarded-for'] || req.connection.remoteAddress
 export const routes = (app) => {
+  app.get("/", (req, res) => {
+    return res.redirect("/api-docs");
+  });
   app.get("/api/v1/ping", (req, res) => {
     return res.sendStatus(200);
   });
