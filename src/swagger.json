@@ -1,0 +1,388 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Express-REST-API",
+        "description": "This is an API application made with Express,MongoDB,Redis and Docker and documented with Swagger.<br\/> <b>NOTE:<\/b><br\/>Cookie authentication currently does not work in Swagger UI and Swagger Editor because of <a href=\"https:\/\/developer.mozilla.org\/en-US\/docs\/Glossary\/Forbidden_header_name\" target=\"_blank\">browser security restrictions<\/a> that prevent web pages from modifying certain headers (such as Cookie) programmatically. Please see <a href=\"https:\/\/github.com\/swagger-api\/swagger-js\/issues\/1163\" target=\"_blank\">swagger-api/swagger-js#1163 for details.<\/a><br\/>For Chrome / Brave Browser you can use : <br\/> <a href=\"https:\/\/chrome.google.com\/webstore\/detail\/editthiscookie\/fngmhnnpilhplaeedifhccceomclgfbg\" target=\"_blank\">EditThisCookie Extension</a> OR <a href=\"https:\/\/swagger.io\/tools\/swaggerhub\/\" target=\"_blank\">Swaggerhub</a>" ,
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "contact": {
+            "url": "https://github.com/Soufianetyk1337"
+        }
+    },
+    "servers": [
+        {
+            "url": "/api/v1",
+            "description": "With docker-compose"
+        }
+    ],
+    "tags": [
+        {
+            "name": "ping"
+        },
+        {
+            "name": "Users",
+            "description": "API for user in the database"
+        }
+    ],
+    "paths": {
+        "/ping": {
+            "get": {
+                "tags": [
+                    "ping"
+                ],
+                "summary": "Check API status",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/users/register": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Register a user to the application",
+                "requestBody": {
+                    "description": "Registering a user and sending an activation link to his email account",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserRegister"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User created"
+                    },
+                    "409": {
+                        "description": "Conflict."
+                    }
+                    
+                }
+            }
+        },
+        "/users/login": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "security": [],
+                "summary": "Authenticates a customer to the application",
+                "requestBody": {
+                    "description": "User  can authenticate after registration",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserLogin"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User successfully authenticated. The session ID is returned in a cookie named `sid`. You need to include this cookie in subsequent requests.",
+                        "headers": {
+                            "Set-Cookie":{
+                                "schema":{
+                                    "type": "string",
+                                    "example":"sid=s%3Ahd2-mgniWsGz8plZCqcfsx1PqooBiRB5.F1WeG0SONYBuCqY0MTcgQE4nssCrU4dsRg6ZdAIrrMI"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid email or password"
+                    },
+                    "429": {
+                        "description": "Too many requests"
+                    }
+                }
+            }
+        },
+        "/users/logout": {
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Logout a user from the application",
+                "parameters": [
+                    {
+                        "in": "cookie",
+                        "name": "sid",
+                        "schema":{
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Session ID of the user"
+                    }
+                ],
+                "security": [
+                    {
+                        "cookieAuth":[]
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User logged out."
+                        },
+                    "401": {
+                        "description": "Unauthorized."
+                    }
+                }
+            }
+        },
+        "/users/password/reset": {
+            "patch": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Sends a request to change password",
+               
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID of the user that we want to match",
+                        "schema": {
+                            "properties": {
+
+                                "id": {
+                                    "type": "string",
+                                    "required": [
+                                        "true"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "token",
+                        "required": true,
+                        "description": "token of the user that we want to match",
+                        "schema": {
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "required": [
+                                        "true"
+                                    ]
+                                }
+                            }
+
+                        }
+                    }
+                ],
+                "requestBody":{
+                    "description": "User password reset request",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "password":{
+                                        "type": "string",
+                                        "required": ["true"],
+                                        "format": "password"
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged out."
+                    },
+                    "400": {
+                        "description": "Password reset link expired."
+                    }
+                }
+            }
+        },
+        "/users/password/confirm": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                
+                "summary": "Sends a request to confirm password",
+                "requestBody": {
+                    "description": "User should confirm his password if he changes some critical data ",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "password":{
+                                        "type": "string",
+                                        "required": ["true"],
+                                        "format": "password"
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+               
+                "responses": {
+                    "200": {
+                        "description": "Password confirmed successfully."
+                    },
+                    "401": {
+                        "description": "Password is incorrect."
+                    }
+                }
+            }
+        },
+        "/users/password/forgot": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Sends a request to forgot password",
+                "requestBody": {
+                    "description": "Send a reset password link to the user email to reset his password",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email":{
+                                        "type": "string",
+                                        "required": ["true"],
+                                        "format": "email"
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                
+                "responses": {
+                    "200": {
+                        "description": "Reset password link sent to your email"
+                    },
+                    "401": {
+                        "description": "Invalid Email"
+                    }
+                }
+            }
+        },
+        
+        "/users/email/verify": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Send a request to activate user account",
+                "parameters": [
+                    
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "required": true,
+                        "description": "ID of the user that we want to match",
+                        "schema": {
+                            "properties": {
+
+                                "id": {
+                                    "type": "string",
+                                    "required": [
+                                        "true"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "verificationToken",
+                        "required": true,
+                        "description": "token of the user that we want to match",
+                        "schema": {
+                            "properties": {  
+                                "verificationToken": {
+                                    "type": "string",
+                                    "required": [
+                                        "true"
+                                    ]
+                                }
+                            }
+
+                        }
+                    }
+                ],
+              
+                "responses": {
+                    "200": {
+                        "description": "You have succesfully verified your account"
+                    },
+                    "400":{
+                        "description": "Your verification link expired"
+                    },
+                    "401": {
+                        "description": "Please check your email for verification link"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "cookieAuth":{
+                "type": "apiKey",
+                "in": "cookie",
+                "name": "sid"
+            }
+        },
+        "schemas": {
+            "UserRegister": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "format": "password"
+                },
+                "confirmPassword": {
+                    "type": "string",
+                    "format": "password"
+                }
+            }
+        },
+        "UserLogin": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "format": "email"
+                },
+                "password": {
+                    "type": "string",
+                    "format": "password"
+                }
+            }
+        }
+        }
+    }
+}
