@@ -1,0 +1,51 @@
+version: '3'
+services:
+  api:
+    image: rest-api-server 
+    container_name: api
+    build: .
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '8080:8080'
+    depends_on:
+      - mongo
+      - redis-server
+    networks: 
+      - rest-api
+    volumes:
+      - .:/usr/src/app
+      - /app/node_modules/
+  mongo:
+    container_name: mongo
+    image: 'mongo:4.4-bionic'
+    expose:
+      - 27017
+    command: ["--logpath","/var/log/mongodb/mongo.log"]
+    networks:
+      - rest-api
+    volumes:
+      - mongo-data:/data/db 
+  redis-server:
+    container_name: redis
+    hostname: redis
+    image: 'redis:6.2-alpine'
+    command:
+      - /usr/local/bin/redis-server 
+      - /usr/local/etc/redis/redis.conf
+    restart : unless-stopped
+    expose:
+      - 6379
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - ../redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      - rest-api
+volumes:
+  mongo-data:
+    driver: local
+networks:
+  rest-api:
+    driver: bridge
