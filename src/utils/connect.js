@@ -3,7 +3,7 @@ import process, { env } from "process";
 import { logger } from "./logger.js";
 
 const connect = () => {
-  const dbURI = env.DB_URI;
+  const dbURI = env.NODE_ENV === 'development' ? env.DB_URI_LOCAL : env.DB_URI_PROD;
   mongoose.connection
     .on('error', logger.error)
     .on('disconnected', connect)
