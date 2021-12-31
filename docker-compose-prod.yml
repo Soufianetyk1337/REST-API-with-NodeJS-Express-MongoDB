@@ -1,0 +1,32 @@
+version: "3"
+services:
+  rest-api-server:
+    image: rest-api-server
+    build: 
+      context: .
+      args:
+        NODE_ENV: production
+    ports:
+      - "8080:8080"
+    networks: 
+      - express-mongo
+    network_mode: host
+    depends_on: 
+      - redis
+  redis:
+    image: redis:6.2-alpine
+    command: ["redis-server", "--bind", "redis", "--port", "6379"]
+    ports:
+      - "6379:6379"
+    expose:
+      - 6379
+    restart: always
+    environment:
+      - ALLOW_EMOTY_PASSWORD=yes
+    networks:
+      - express-mongo
+    volumes:
+      - ./redis.conf:/redis.conf
+networks:
+  express-mongo:
+    driver: bridge
