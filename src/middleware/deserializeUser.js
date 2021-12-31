@@ -5,6 +5,7 @@ export const deserializeUser = async (req, res, next) => {
     if (!accessToken) {
         return next()
     }
+    // eslint-disable-next-line no-unused-vars
     const { decoded, expired } = await verifyJwt(accessToken)
     if (decoded) {
         res.locals.user = decoded;
