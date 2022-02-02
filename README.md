@@ -1,6 +1,6 @@
 
 # REST-API-with-NodeJS-Express-MongoDB
-Make sure you have the rerequisites
+Make sure you have 
 - Latest version of Docker 
 
 ## Run Locally
