@@ -23,8 +23,8 @@ cp .env_example .env
 generate your own RSA keys using openSSL
 
 ```bash
-  cd src && mkdir keys && cd keys
-  openssl genrsa -out private_key.pem 3072
+  cd src && mkdir keys && cd keys \
+  openssl genrsa -out private_key.pem 3072 \
   openssl rsa -in private_key.pem -pubout -out public_key.pem
 ```
 get your own API KEY from  https://emailverification.whoisxmlapi.com and paste it in .env file
