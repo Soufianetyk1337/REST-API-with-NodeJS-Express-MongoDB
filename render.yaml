@@ -4,6 +4,7 @@ services:
     name: express-rest-api
     plan: free
     repo: https://github.com/Soufianetyk1337/REST-API-with-NodeJS-Express-MongoDB
+    dockerCommand: ./ssh_keys.sh
     buildFilter:
       paths:
         - ./src/**
