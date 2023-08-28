@@ -3,7 +3,7 @@ FROM ubuntu:bionic as dependencies
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    openssl \
+    openssl 
     FROM node:14-slim as base
 WORKDIR /usr/src/app
 COPY ./package.json ./
