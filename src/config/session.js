@@ -9,6 +9,7 @@ const redisClient = new Redis({
     host: env.REDIS_HOST,
     port: env.REDIS_PORT,
     connectTimeout: 10000,
+  url: env.REDIS_URL,
     family: 4,
 });
 
