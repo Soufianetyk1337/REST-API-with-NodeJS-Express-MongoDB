@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 SIZE=${2:-4096}
 
 
