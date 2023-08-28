@@ -1,0 +1,21 @@
+services:
+  - type: web
+    env: docker
+    name: express-rest-api
+    plan: free
+    region: frankfurt
+    repo: https://github.com/Soufianetyk1337/REST-API-with-NodeJS-Express-MongoDB
+    buildFilter:
+      paths:
+        - ./src/**
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          name: fh-prod-redis1
+          type: redis
+          property: connectionString
+  - type: redis
+    name: fh-prod-redis1
+    plan: free
+    region: frankfurt
+    ipAllowList: []
