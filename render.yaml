@@ -1,12 +1,14 @@
 services:
   - type: web
-    env: docker
+    env: node
     name: express-rest-api
     plan: free
     repo: https://github.com/Soufianetyk1337/REST-API-with-NodeJS-Express-MongoDB
     buildFilter:
       paths:
         - ./src/**
+    buildCommand: yarn
+    startCommand: yarn run prod
     envVars:
       - key: REDIS_URL
         fromService:
