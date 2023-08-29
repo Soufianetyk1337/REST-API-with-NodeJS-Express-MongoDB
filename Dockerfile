@@ -12,3 +12,6 @@ COPY . .
 ENV PORT 8080
 EXPOSE ${PORT}
 CMD if [ "$NODE_ENV" = "development" ]; \ 
+    then [ "yarn" , "run" , "dev" ]\
+    else [ "yarn" , "run" , "prod" ]; \
+    fi
