@@ -11,4 +11,4 @@ RUN if [ "$NODE_ENV" = "development" ]; \
 COPY . .
 ENV PORT 8080
 EXPOSE ${PORT}
-CMD [ "yarn" , "run" , "dev" ]
+CMD if [ "$NODE_ENV" = "development" ]; \ 
