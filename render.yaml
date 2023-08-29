@@ -26,7 +26,6 @@ services:
           name: fh-prod-redis1
           property: port
   - type: redis
-    env: docker
     name: fh-prod-redis1
     plan: free
     ipAllowList: []
