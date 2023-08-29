@@ -13,6 +13,16 @@ services:
           name: fh-prod-redis1
           type: redis
           property: connectionString
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: fh-prod-redis1
+          property: host 
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: fh-prod-redis1
+          property: port
   - type: redis
     name: fh-prod-redis1
     plan: free
