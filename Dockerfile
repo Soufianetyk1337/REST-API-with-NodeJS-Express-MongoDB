@@ -1,10 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM ubuntu:bionic as dependencies
-
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    openssl 
-    FROM node:14-slim as base
+FROM node:14-slim 
 WORKDIR /usr/src/app
 COPY ./package.json ./
 COPY ./yarn.lock ./ 
