@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 COPY ./package.json ./
 COPY ./yarn.lock ./ 
 ARG NODE_ENV
-RUN yarn install --only=production;
+RUN yarn install --only=production
 
 COPY . .
 ENV PORT 8080
