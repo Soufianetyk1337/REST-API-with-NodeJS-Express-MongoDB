@@ -6,6 +6,7 @@ import { logger } from "../utils/logger.js";
 const HALF_HOUR = 1000 * 60 * 30;
 const RedisStore = connectRedis(session);
 const redisClient = new Redis({
+  url: env.REDIS_URL,
   connectTimeout: 10000,
   url: env.REDIS_URL,
   family: 4,
