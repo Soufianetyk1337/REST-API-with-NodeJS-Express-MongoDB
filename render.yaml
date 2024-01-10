@@ -1,0 +1,31 @@
+services:
+  - type: web
+    env: node
+    name: express-rest-api
+    plan: free
+    repo: https://github.com/Soufianetyk1337/REST-API-with-NodeJS-Express-MongoDB
+    buildFilter:
+      paths:
+        - ./src/**
+    buildCommand: yarn
+    startCommand: yarn run prod
+    envVars:
+      - key: REDIS_URL
+        fromService:
+          name: fh-prod-redis1
+          type: redis
+          property: connectionString
+      - key: REDIS_HOST
+        fromService:
+          type: redis
+          name: fh-prod-redis1
+          property: host
+      - key: REDIS_PORT
+        fromService:
+          type: redis
+          name: fh-prod-redis1
+          property: port
+  - type: redis
+    name: fh-prod-redis1
+    plan: free
+    ipAllowList: []
