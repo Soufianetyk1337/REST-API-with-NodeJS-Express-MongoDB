@@ -1,4 +1,4 @@
-import { readKeyFromFile } from '../helpers/readKeyFromFile.js'
+//import { readKeyFromFile } from '../helpers/readKeyFromFile.js'
 const privateKey = process.env.PRIVATE_KEY;
 const publicKey = process.env.PUBLIC_KEY;
 import jwt from "jsonwebtoken";
