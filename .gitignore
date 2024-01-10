@@ -4,3 +4,4 @@ node_modules/
 .env 
 #JWT KEYS
 src/keys/**
+Notes.MD

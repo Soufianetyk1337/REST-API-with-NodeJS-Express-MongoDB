@@ -2,8 +2,8 @@
     "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
-        "title": "Express-REST-API",
-        "description": "This is an API application made with Express,MongoDB,Redis and Docker and documented with Swagger.<br\/> <b>NOTE:<\/b><br\/>Cookie authentication currently does not work in Swagger UI and Swagger Editor because of <a href=\"https:\/\/developer.mozilla.org\/en-US\/docs\/Glossary\/Forbidden_header_name\" target=\"_blank\">browser security restrictions<\/a> that prevent web pages from modifying certain headers (such as Cookie) programmatically. Please see <a href=\"https:\/\/github.com\/swagger-api\/swagger-js\/issues\/1163\" target=\"_blank\">swagger-api/swagger-js#1163 for details.<\/a><br\/>For Chrome / Brave Browser you can use : <br\/> <a href=\"https:\/\/chrome.google.com\/webstore\/detail\/editthiscookie\/fngmhnnpilhplaeedifhccceomclgfbg\" target=\"_blank\">EditThisCookie Extension</a> OR <a href=\"https:\/\/swagger.io\/tools\/swaggerhub\/\" target=\"_blank\">Swaggerhub</a>" ,
+        "title": "Kanban board REST API",
+        "description": "This is a Kanban Board REST API application made with Express,MongoDB,Redis and Docker and documented with Swagger. <br\/> ",
         "license": {
             "name": "MIT",
             "url": "https://opensource.org/licenses/MIT"
@@ -25,6 +25,18 @@
         {
             "name": "Users",
             "description": "API for user in the database"
+        },
+        {
+            "name": "Boards",
+            "description": "API for user boards in the database"
+        },
+        {
+            "name": "Sections",
+            "description": "API for user section in each boards in the database"
+        },
+        {
+            "name": "Tasks",
+            "description": "API for user tasks in each section in the database"
         }
     ],
     "paths": {
@@ -65,7 +77,6 @@
                     "409": {
                         "description": "Conflict."
                     }
-                    
                 }
             }
         },
@@ -91,10 +102,10 @@
                     "200": {
                         "description": "User successfully authenticated. The session ID is returned in a cookie named `sid`. You need to include this cookie in subsequent requests.",
                         "headers": {
-                            "Set-Cookie":{
-                                "schema":{
+                            "Set-Cookie": {
+                                "schema": {
                                     "type": "string",
-                                    "example":"sid=s%3Ahd2-mgniWsGz8plZCqcfsx1PqooBiRB5.F1WeG0SONYBuCqY0MTcgQE4nssCrU4dsRg6ZdAIrrMI"
+                                    "example": "sid=s%3Ahd2-mgniWsGz8plZCqcfsx1PqooBiRB5.F1WeG0SONYBuCqY0MTcgQE4nssCrU4dsRg6ZdAIrrMI"
                                 }
                             }
                         }
@@ -114,26 +125,15 @@
                     "Users"
                 ],
                 "summary": "Logout a user from the application",
-                "parameters": [
-                    {
-                        "in": "cookie",
-                        "name": "sid",
-                        "schema":{
-                            "type": "string"
-                        },
-                        "required": true,
-                        "description": "Session ID of the user"
-                    }
-                ],
                 "security": [
                     {
-                        "cookieAuth":[]
+                        "cookieAuth": []
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "User logged out."
-                        },
+                    },
                     "401": {
                         "description": "Unauthorized."
                     }
@@ -146,7 +146,6 @@
                     "Users"
                 ],
                 "summary": "Sends a request to change password",
-               
                 "parameters": [
                     {
                         "in": "query",
@@ -155,7 +154,6 @@
                         "description": "ID of the user that we want to match",
                         "schema": {
                             "properties": {
-
                                 "id": {
                                     "type": "string",
                                     "required": [
@@ -179,22 +177,22 @@
                                     ]
                                 }
                             }
-
                         }
                     }
                 ],
-                "requestBody":{
+                "requestBody": {
                     "description": "User password reset request",
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "password":{
+                                    "password": {
                                         "type": "string",
-                                        "required": ["true"],
+                                        "required": [
+                                            "true"
+                                        ],
                                         "format": "password"
-
                                     }
                                 }
                             }
@@ -216,7 +214,6 @@
                 "tags": [
                     "Users"
                 ],
-                
                 "summary": "Sends a request to confirm password",
                 "requestBody": {
                     "description": "User should confirm his password if he changes some critical data ",
@@ -225,18 +222,18 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "password":{
+                                    "password": {
                                         "type": "string",
-                                        "required": ["true"],
+                                        "required": [
+                                            "true"
+                                        ],
                                         "format": "password"
-
                                     }
                                 }
                             }
                         }
                     }
                 },
-               
                 "responses": {
                     "200": {
                         "description": "Password confirmed successfully."
@@ -260,18 +257,18 @@
                         "application/json": {
                             "schema": {
                                 "properties": {
-                                    "email":{
+                                    "email": {
                                         "type": "string",
-                                        "required": ["true"],
+                                        "required": [
+                                            "true"
+                                        ],
                                         "format": "email"
-
                                     }
                                 }
                             }
                         }
                     }
                 },
-                
                 "responses": {
                     "200": {
                         "description": "Reset password link sent to your email"
@@ -282,7 +279,6 @@
                 }
             }
         },
-        
         "/users/email/verify": {
             "get": {
                 "tags": [
@@ -290,7 +286,6 @@
                 ],
                 "summary": "Send a request to activate user account",
                 "parameters": [
-                    
                     {
                         "in": "query",
                         "name": "id",
@@ -298,7 +293,6 @@
                         "description": "ID of the user that we want to match",
                         "schema": {
                             "properties": {
-
                                 "id": {
                                     "type": "string",
                                     "required": [
@@ -314,7 +308,7 @@
                         "required": true,
                         "description": "token of the user that we want to match",
                         "schema": {
-                            "properties": {  
+                            "properties": {
                                 "verificationToken": {
                                     "type": "string",
                                     "required": [
@@ -322,16 +316,14 @@
                                     ]
                                 }
                             }
-
                         }
                     }
                 ],
-              
                 "responses": {
                     "200": {
                         "description": "You have succesfully verified your account"
                     },
-                    "400":{
+                    "400": {
                         "description": "Your verification link expired"
                     },
                     "401": {
@@ -339,11 +331,505 @@
                     }
                 }
             }
+        },
+        "/boards/": {
+            "get": {
+                "tags": [
+                    "Boards"
+                ],
+                "summary": "Get all boards for a specifig user.",
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return all boards as JSON if there is any boards for that user."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Boards"
+                ],
+                "security": [],
+                "summary": "Add new board for a specific user.",
+                "requestBody": {
+                    "description": "User can add boards after authentication",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/NewBoard"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Baord successfully created."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "429": {
+                        "description": "Too many requests"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Boards"
+                ],
+                "security": [],
+                "summary": "Updating boards positions.",
+                "requestBody": {
+                    "description": "User can change boards positions with drag and drop in the UI.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BoardPositionUpdateOrToggleFavorite"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Baords successfully updated."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "429": {
+                        "description": "Too many requests"
+                    }
+                }
+            }
+        },
+        "/boards/favorites": {
+            "get": {
+                "tags": [
+                    "Boards"
+                ],
+                "security": [],
+                "summary": "Get all favorites boards.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "boardId",
+                        "schema": {
+                            "type": "string",
+                            "example": "63f6062faab2f342ba1f6a09"
+                        },
+                        "required": true,
+                        "description": "Board ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return all favorites boards.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BoardPositionUpdateOrToggleFavorite"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "429": {
+                        "description": "Too many requests"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Boards"
+                ],
+                "security": [],
+                "summary": "Updating favorite boards position (UI drag and drop).",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "boardId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Board ID"
+                    }
+                ],
+                "requestBody": {
+                    "description": "User can toggle the favorite status for his boards.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BoardPositionUpdateOrToggleFavorite"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "favorite baords updated succesfully."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "429": {
+                        "description": "Too many requests"
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}": {
+            "get": {
+                "tags": [
+                    "Boards"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "boardId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Board ID"
+                    }
+                ],
+                "security": [],
+                "summary": "Get one board.",
+                "responses": {
+                    "200": {
+                        "description": "Return current board."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "429": {
+                        "description": "Too many requests"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Boards"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "boardId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Board ID"
+                    }
+                ],
+                "security": [],
+                "summary": "Update one board.",
+                "requestBody": {
+                    "description": "User can update boards after authentication",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Board"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Return current updated board."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "429": {
+                        "description": "Too many requests"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Boards"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "boardId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Board ID"
+                    }
+                ],
+                "security": [],
+                "summary": "Delete one board.",
+                "responses": {
+                    "200": {
+                        "description": "Board deleted succesfully."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "429": {
+                        "description": "Too many requests"
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/sections": {
+            "post": {
+                "tags": [
+                    "Sections"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "boardId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Board ID"
+                    }
+                ],
+                "security": [],
+                "summary": "Create section in the current board.",
+                "responses": {
+                    "200": {
+                        "description": "Create new section with default values in the current board."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "429": {
+                        "description": "Too many requests"
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/sections/{sectionId}": {
+            "put": {
+                "tags": [
+                    "Sections"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "boardId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Board ID"
+                    },
+                    {
+                        "in": "path",
+                        "name": "sectionId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Section ID"
+                    }
+                ],
+                "security": [],
+                "summary": "Create section in the current board.",
+                "requestBody": {
+                    "description": "Updating a section in the a current board.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Section"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Create new section with default values in the current board."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "429": {
+                        "description": "Too many requests"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Sections"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "boardId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Board ID"
+                    },
+                    {
+                        "in": "path",
+                        "name": "sectionId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Section ID"
+                    }
+                ],
+                "security": [],
+                "summary": "Delete the section with sectionId in the current board.",
+                "responses": {
+                    "200": {
+                        "description": "Delete a section in the current board."
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "429": {
+                        "description": "Too many requests"
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/tasks/": {
+            "post": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Create a task in a board for a specific section.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "boardId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Board ID"
+                    }
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return current created task."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/tasks/update-position": {
+            "post": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Create a task in a board for a specific section.",
+                "requestBody": {
+                    "description": "Updating a task position.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateTaskPosition"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "boardId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Board ID"
+                    }
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return current created task."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    }
+                }
+            }
+        },
+        "/boards/{boardId}/tasks/{taskId}": {
+            "delete": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Create a task in a board for a specific section.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "boardId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Board ID"
+                    },
+                    {
+                        "in": "path",
+                        "name": "taskId",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "required": true,
+                        "description": "Task ID"
+                    }
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task deleted successfullys."
+                    },
+                    "401": {
+                        "description": "Unauthorized."
+                    }
+                }
+            }
         }
     },
     "components": {
         "securitySchemes": {
-            "cookieAuth":{
+            "cookieAuth": {
                 "type": "apiKey",
                 "in": "cookie",
                 "name": "sid"
@@ -351,38 +837,129 @@
         },
         "schemas": {
             "UserRegister": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "format": "email"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string",
-                    "format": "password"
-                },
-                "confirmPassword": {
-                    "type": "string",
-                    "format": "password"
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "confirmPassword": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                }
+            },
+            "UserLogin": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    }
+                }
+            },
+            "NewBoard": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "icon": {
+                        "type": "string",
+                        "format": "icon"
+                    }
+                }
+            },
+            "Board": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string",
+                        "default": "Untitled"
+                    },
+                    "description": {
+                        "type": "string",
+                        "default": "Insert a description."
+                    },
+                    "position": {
+                        "type": "number"
+                    },
+                    "favorite": {
+                        "type": "boolean",
+                        "default": "false"
+                    }
+                }
+            },
+            "BoardPositionUpdateOrToggleFavorite": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/Board"
+                }
+            },
+            "Section": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "default": ""
+                    }
+                }
+            },
+            "Task": {
+                "type": "object",
+                "properties": {
+                    "section": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string",
+                        "default": " "
+                    },
+                    "content": {
+                        "type": "string",
+                        "default": " "
+                    }
+                }
+            },
+            "UpdateTaskPosition": {
+                "type": "object",
+                "properties": {
+                    "sourceTasks": {
+                        "type": "array",
+                        "$ref": "#/components/schemas/Task"
+                    },
+                    "destinationTasks": {
+                        "type": "array",
+                        "$ref": "#/components/schemas/Task"
+                    },
+                    "resourceSectionId": {
+                        "type": "string"
+                    },
+                    "destinationSectionId": {
+                        "type": "string"
+                    }
                 }
             }
-        },
-        "UserLogin": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "format": "email"
-                },
-                "password": {
-                    "type": "string",
-                    "format": "password"
-                }
-            }
-        }
         }
     }
 }

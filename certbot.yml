@@ -1,0 +1,19 @@
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    restart: always
+    command: certonly --webroot --register-unsafely-without-email --agree-tos --webroot-path=/data/letsencrypt -d express-restapi.com -d www.express-restapi.com
+    volumes:
+      - docker-volumes/etc/letsencrypt:/etc/letsencrypt
+      - docker-volumes/var/lib/letsencrypt:/var/lib/letsencrypt
+      - docker/letsencrypt-docker-nginx/src/letsencrypt/letsencrypt-site:/data/letsencrypt
+      - docker-volumes/var/log/letsencrypt:/var/log/letsencrypt  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    restart: always
+    command: certonly --webroot --register-unsafely-without-email --agree-tos --webroot-path=/data/letsencrypt -d express-restapi.com -d www.express-restapi.com
+    volumes:
+      - docker-volumes/etc/letsencrypt:/etc/letsencrypt
+      - docker-volumes/var/lib/letsencrypt:/var/lib/letsencrypt
+      - docker/letsencrypt-docker-nginx/src/letsencrypt/letsencrypt-site:/data/letsencrypt
+      - docker-volumes/var/log/letsencrypt:/var/log/letsencrypt

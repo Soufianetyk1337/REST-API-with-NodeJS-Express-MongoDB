@@ -1,0 +1,57 @@
+Arguments: 
+  /home/soufiane1337/.nvm/versions/node/v14.18.1/bin/node /home/soufiane1337/.yarn/bin/yarn.js add mongodb
+
+PATH: 
+  /home/soufiane1337/.yarn/bin:/home/soufiane1337/.config/yarn/global/node_modules/.bin:/home/soufiane1337/.vscode-server/bin/b3318bc0524af3d74034b8bb8a64df0ccf35549a/bin:/home/soufiane1337/.yarn/bin:/home/soufiane1337/.config/yarn/global/node_modules/.bin:/home/soufiane1337/.nvm/versions/node/v14.18.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/mnt/c/Python310/Scripts/:/mnt/c/Python310/:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files/nodejs/:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/Users/DELL/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/DELL/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/DELL/AppData/Local/GitHubDesktop/bin:/mnt/c/Users/DELL/AppData/Roaming/npm:/mnt/c/Program Files (x86)/GitHub CLI/:/mnt/c/Program Files/JetBrains/IntelliJ IDEA 2021.2.3/bin:/mnt/c/Users/DELL/mongosh-1.1.2-win32-x64/mongosh-1.1.2-win32-x64/bin
+
+Yarn version: 
+  1.22.15
+
+Node version: 
+  14.18.1
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: getaddrinfo ENOTFOUND registry.npmjs.org
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:71:26)
+
+npm manifest: 
+  {
+    "name": "rest-api-with-nodejs-express-mongodb",
+    "version": "1.0.0",
+    "main": "app.js",
+    "author": "Soufianetyk1337 <sz.fanel@gmail.com>",
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+      "start": "nodemon --delay 1000ms --watch src src/app.js"
+    },
+    "dependencies": {
+      "bcrypt": "^5.0.1",
+      "config": "^3.3.6",
+      "connect-redis": "^6.0.0",
+      "consola": "^2.15.3",
+      "cors": "^2.8.5",
+      "dayjs": "^1.10.7",
+      "dotenv": "^10.0.0",
+      "express": "^4.17.1",
+      "express-session": "^1.17.2",
+      "ioredis": "^4.28.0",
+      "jsonwebtoken": "^8.5.1",
+      "lodash": "^4.17.21",
+      "mongoose": "^6.0.12",
+      "nanoid": "^3.1.30",
+      "yup": "^0.32.11"
+    },
+    "devDependencies": {
+      "nodemon": "^2.0.14"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

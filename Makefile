@@ -1,5 +1,5 @@
 build:
-	docker build -t rest-api-server-v1 .
+	docker build -t rest-api-server-v1 . --no-cache
 down:
 	docker-compose down --remove-orphans --volumes
 up:

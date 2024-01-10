@@ -1,4 +1,3 @@
-
 import { createUser } from "../service/user.service.js";
 import { UserModel } from "../model/user.model.js";
 import { verify } from "crypto";
@@ -9,16 +8,20 @@ import { tokenGenerator } from "../helpers/tokenGenerator.js";
 import { passwordForgot } from "../template/passwordForgot.js";
 import { emailVerification } from "../template/emailVerification.js";
 import { verifyJwt } from "../utils/jwt_utils.js";
-
+const BASE_URL =
+  env.NODE_ENV === "development" ? env.BASE_URL : env.BASE_URL_PROD;
 export const createUserHandler = async (req, res) => {
+  // eslint-disable-next-line no-undef
+  console.log("Register attempt", req.body);
   try {
     const user = await createUser(req, res);
     if (user.code === 11000) {
-      return res.status(409).json({ success: false, message: "Email address already in use" });
-
+      return res
+        .status(409)
+        .json({ success: false, message: "Email address already in use" });
     }
     const token = tokenGenerator(user.email);
-    const link = `${env.BASE_URL}/users/email/verify?id=${user._id}&verificationToken=${token}`;
+    const link = `${BASE_URL}/users/email/verify?id=${user._id}&verificationToken=${token}`;
     let mailOptions = {
       from: '"John Doe" <john-doe@gmail.com>',
       to: user.email,
@@ -56,6 +59,48 @@ export const createUserHandler = async (req, res) => {
   }
 };
 
+export const sendEmailToVerifyUserAccount = async (req, res) => {
+  const { email } = req.body;
+  const user = await UserModel.findOne({ email: email });
+  if (!user) {
+    return res.status(404).json("Invalid email");
+  }
+  const token = tokenGenerator(user.email);
+  const link = `${BASE_URL}/users/email/verify?id=${user._id}&verificationToken=${token}`;
+  let mailOptions = {
+    from: '"John Doe" <john-doe@gmail.com>',
+    to: user.email,
+    subject: "email verification",
+    html: emailVerification(
+      link,
+      user.name,
+      env.PASSWORD_RESET_EXPIRY_IN_MINUTES || 15,
+      verify
+    ),
+  };
+  let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    service: "gmail",
+    auth: {
+      user: env.NODEMAILER_USER,
+      pass: env.NODEMAILER_PASS,
+    },
+  });
+  const mailSent = await transporter.sendMail(mailOptions);
+  if (mailSent) {
+    return res.status(201).json({
+      success: "true",
+      message:
+        "Verify link sent successfully. Check your email to verify your account.",
+      created: { user },
+    });
+  } else {
+    return res.status(409).json({ mailSent });
+  }
+};
+
 export const createUserPasswordReset = async (req, res) => {
   const { id, token } = req.query;
   const { newPassword } = req.body;
@@ -77,12 +122,10 @@ export const createUserPasswordReset = async (req, res) => {
     }
     user.password = await user.hashPassword(newPassword);
     await user.save();
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "You have succesfully reset your password",
-      });
+    return res.status(200).json({
+      success: true,
+      message: "You have succesfully reset your password",
+    });
   } else {
     return res.status(400).json({
       success: false,
@@ -117,7 +160,11 @@ export const createUserEmailVerification = async (req, res) => {
 
   const { valid, expired } = verifyJwt(verificationToken);
   if (valid && !expired) {
-    const user = await UserModel.findByIdAndUpdate(id, { confirmed: true });
+    const user = await UserModel.findByIdAndUpdate(
+      id,
+      { confirmed: true },
+      { new: true }
+    );
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
@@ -158,7 +205,7 @@ export const createUserPasswordForgot = async (req, res) => {
   if (!passwordResetAttempt) {
     return res.status(500).send("Something went wrong. Try again later");
   }
-  const link = `${env.BASE_URL}/users/password/reset?id=${user._id}&token=${token}`;
+  const link = `${BASE_URL}/users/password/reset?id=${user._id}&token=${token}`;
   let mailOptions = {
     from: '"John Doe" <john-doe@gmail.com>',
     to: user.email,
@@ -182,13 +229,17 @@ export const createUserPasswordForgot = async (req, res) => {
   });
   const mailSent = await transporter.sendMail(mailOptions);
   if (mailSent) {
-    return res.status(200).json({ success: true, message: "Check your email for reset link" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Check your email for reset link" });
   } else {
-    return res.status(400).json({ success: false, message: "Unable to send email." });
+    return res
+      .status(400)
+      .json({ success: false, message: "Unable to send email." });
   }
 };
 
-export const createUserSendEmailVerification = (req, res) => { };
+export const createUserSendEmailVerification = (req, res) => {};
 /**
  * @description
  * @api
