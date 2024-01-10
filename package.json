@@ -7,6 +7,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon --delay 1000ms --watch src src/app.js",
+    "prod": "node src/app.js",
     "eslint": "eslint --init"
   },
   "dependencies": {
