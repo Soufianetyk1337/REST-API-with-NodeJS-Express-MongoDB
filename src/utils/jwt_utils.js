@@ -1,6 +1,6 @@
 import { readKeyFromFile } from '../helpers/readKeyFromFile.js'
-const privateKey = readKeyFromFile("private_key.pem");
-const publicKey = readKeyFromFile("public_key.pem");
+const privateKey = process.env.PRIVATE_KEY;
+const publicKey = process.env.PUBLIC_KEY;
 import jwt from "jsonwebtoken";
 import { logger } from '../utils/logger.js'
 export const signJwt = (payload, options = {}) => {
